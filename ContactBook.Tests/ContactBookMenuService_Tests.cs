@@ -6,6 +6,7 @@ using ContactBook.Models;
 using ContactBook.Services;
 using Moq;
 using Xunit;
+using System.IO;
 
 namespace ContactBook.Tests
 {
@@ -119,6 +120,11 @@ namespace ContactBook.Tests
             // Reset standard output and input after each test
             Console.SetOut(OriginalConsoleOutput);
             Console.SetIn(OriginalConsoleInput);
+
+            // Save console output to a file or variable for analysis
+            File.WriteAllText("console_output.txt", ConsoleOutput.ToString());
+            // Alternatively, you can save it to a variable for later analysis
+            // string consoleOutputText = ConsoleOutput.ToString();
             ConsoleOutput.Dispose();
         }
     }
