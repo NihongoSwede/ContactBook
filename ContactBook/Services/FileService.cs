@@ -1,7 +1,5 @@
 ﻿using ContactBook.Interfaces;
-using System;
 using System.Diagnostics;
-using System.IO;
 
 namespace ContactBook.Services
 {
