@@ -9,39 +9,38 @@ using System.Diagnostics;
 using System.Linq;
 using ContactBook.Services;
 
-namespace ContactBook.Services
+public class CustomerService : ICustomerService
 {
-    public class CustomerService : ICustomerService
+    private readonly IFileService _fileService;
+    private readonly string _filePath;
+
+    private List<ICustomer> _customerList = new List<ICustomer>();
+
+    public CustomerService(IFileService fileService, string filePath = @"c:\Users\mhede\source\repos\ContactBook\customers.json")
     {
-        private readonly IFileService _fileService;
-        private readonly string _filePath;
+        _fileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
+        _filePath = filePath;
+    }
 
-        private List<ICustomer> _customerList = new List<ICustomer>();
 
-        public CustomerService(IFileService fileService, string filePath = @"c:\Users\mhede\source\repos\ContactBook\customers.json")
+    public bool AddToList(ICustomer customer)
+    {
+        try
         {
-            _fileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
-            _filePath = filePath;
+            _customerList.Add(customer);
+            SaveCustomerListToFile();
+            return true;
         }
-
-        public bool AddToList(ICustomer customer)
+        catch (Exception ex)
         {
-            try
-            {
-                _customerList.Add(customer);
-                SaveCustomerListToFile();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Error adding customer to list: {ex.Message}");
-                return false;
-            }
+            Debug.WriteLine($"Error adding customer to list: {ex.Message}");
+            return false;
         }
+    }
 
 
 
-        public IEnumerable<ICustomer> GetAllFromList()
+    public IEnumerable<ICustomer> GetAllFromList()
         {
             try
             {
@@ -128,27 +127,26 @@ namespace ContactBook.Services
             return _customerList.FirstOrDefault(c => c.Email == email)!;
         }
 
-        private void SaveCustomerListToFile()
+    private void SaveCustomerListToFile()
+    {
+        var json = JsonConvert.SerializeObject(_customerList, new JsonSerializerSettings
         {
-            var json = JsonConvert.SerializeObject(_customerList, new JsonSerializerSettings
+            TypeNameHandling = TypeNameHandling.Objects,
+        });
+
+        _fileService.SaveToFile(_filePath, json);
+    }
+
+    private void LoadCustomerListFromFile()
+    {
+        var content = _fileService.GetContentFromFile(_filePath);
+
+        if (!string.IsNullOrEmpty(content))
+        {
+            _customerList = JsonConvert.DeserializeObject<List<ICustomer>>(content, new JsonSerializerSettings
             {
                 TypeNameHandling = TypeNameHandling.Objects,
-            });
-
-            _fileService.SaveToFile(_filePath, json);
-        }
-
-        private void LoadCustomerListFromFile()
-        {
-            var content = _fileService.GetContentFromFile(_filePath);
-
-            if (!string.IsNullOrEmpty(content))
-            {
-                _customerList = JsonConvert.DeserializeObject<List<ICustomer>>(content, new JsonSerializerSettings
-                {
-                    TypeNameHandling = TypeNameHandling.Objects,
-                }) ?? new List<ICustomer>();
-            }
+            }) ?? new List<ICustomer>();
         }
     }
 }

@@ -74,28 +74,28 @@ namespace ContactBook.Services
 
             // Get user input for customer details
             Console.Write("First Name: ");
-            string firstName = Console.ReadLine()!;
+            string firstName = Console.ReadLine();
 
             Console.Write("Last Name: ");
-            string lastName = Console.ReadLine()!;
+            string lastName = Console.ReadLine();
 
             Console.Write("Email: ");
-            string email = Console.ReadLine()!;
+            string email = Console.ReadLine();
 
             Console.Write("PhoneNumber: ");
-            string phoneNumber = Console.ReadLine()!;
+            string phoneNumber = Console.ReadLine();
 
             Console.Write("Adress: ");
-            string address = Console.ReadLine()!;
+            string address = Console.ReadLine();
 
             Console.Write("City: ");
-            string city = Console.ReadLine()!;
+            string city = Console.ReadLine();
 
             Console.Write("PostalCode: ");
-            string postalCode = Console.ReadLine()!;
+            string postalCode = Console.ReadLine();
 
             Console.Write("Country: ");
-            string country = Console.ReadLine()!;
+            string country = Console.ReadLine();
 
             // Create a new customer with the provided details
             var newCustomer = new Customer(firstName, lastName, email, phoneNumber, address, city, postalCode, country);
@@ -145,7 +145,7 @@ namespace ContactBook.Services
             DisplayMenuTitle("Delete Customer by Email");
 
             Console.Write("Enter Email to delete: ");
-            var emailToDelete = Console.ReadLine()!;
+            var emailToDelete = Console.ReadLine();
 
             var result = customerService.DeleteCustomerByEmail(emailToDelete);
 
@@ -168,7 +168,7 @@ namespace ContactBook.Services
             DisplayMenuTitle("Change Customer Information");
 
             Console.Write("Enter Email of the customer to change: ");
-            var emailToChange = Console.ReadLine()!;
+            var emailToChange = Console.ReadLine();
 
             var existingCustomer = customerService.GetAllFromList()?.FirstOrDefault(c => c.Email == emailToChange);
 
@@ -180,55 +180,53 @@ namespace ContactBook.Services
                 Console.WriteLine();
 
                 Console.Write("Enter new First Name (leave blank to keep existing): ");
-                string newFirstName = Console.ReadLine()!;
+                string newFirstName = Console.ReadLine();
                 if (!string.IsNullOrWhiteSpace(newFirstName))
                 {
                     existingCustomer.FirstName = newFirstName;
                 }
 
                 Console.Write("Enter new Last Name (leave blank to keep existing): ");
-                string newLastName = Console.ReadLine()!;
+                string newLastName = Console.ReadLine();
                 if (!string.IsNullOrWhiteSpace(newLastName))
                 {
                     existingCustomer.LastName = newLastName;
                 }
 
                 Console.Write("Enter new Email (leave blank to keep existing): ");
-                string newEmail = Console.ReadLine()!;
+                string newEmail = Console.ReadLine();
                 if (!string.IsNullOrWhiteSpace(newEmail))
                 {
                     existingCustomer.Email = newEmail;
                 }
 
                 Console.Write("Enter new Phone Number (leave blank to keep existing): ");
-                string newPhoneNumber = Console.ReadLine()!;
+                string newPhoneNumber = Console.ReadLine();
                 if (!string.IsNullOrWhiteSpace(newPhoneNumber))
                 {
                     existingCustomer.PhoneNumber = newPhoneNumber;
                 }
 
                 Console.Write("Enter new Address (leave blank to keep existing): ");
-                string newAddress = Console.ReadLine()!;
+                string newAddress = Console.ReadLine();
                 if (!string.IsNullOrWhiteSpace(newAddress))
                 {
                     existingCustomer.Address = newAddress;
                 }
 
                 Console.Write("Enter new City (leave blank to keep existing): ");
-                string newCity = Console.ReadLine()!;
+                string newCity = Console.ReadLine();
                 if (!string.IsNullOrWhiteSpace(newCity))
                 {
                     existingCustomer.City = newCity;
                 }
 
                 Console.Write("Enter new Postal Code (leave blank to keep existing): ");
-                string newPostalCode = Console.ReadLine()!;
+                string newPostalCode = Console.ReadLine();
                 if (!string.IsNullOrWhiteSpace(newPostalCode))
                 {
                     existingCustomer.PostalCode = newPostalCode;
                 }
-
-
 
                 var updateResult = customerService.UpdateCustomer(existingCustomer);
 
@@ -255,7 +253,7 @@ namespace ContactBook.Services
             DisplayMenuTitle("Print Customer by Email");
 
             Console.Write("Enter Email to print: ");
-            var emailToPrint = Console.ReadLine()!;
+            var emailToPrint = Console.ReadLine();
 
             customerService.PrintCustomerByEmail(emailToPrint);
 
@@ -269,7 +267,5 @@ namespace ContactBook.Services
             Console.WriteLine($"## {title} ##");
             Console.WriteLine();
         }
-
-
     }
 }
