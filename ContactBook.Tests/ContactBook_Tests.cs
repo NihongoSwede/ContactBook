@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using ContactBook.Enums;
+﻿using ContactBook.Enums;
 using ContactBook.Interfaces;
-using ContactBook.Services;
 using Moq;
 using Newtonsoft.Json;
-using Xunit;
 
 namespace ContactBook.Tests
 {
@@ -208,7 +204,75 @@ namespace ContactBook.Tests
             }
         }
 
+        [Fact]
+        public void UpdateCustomer_ShouldReturnNotFound_WhenCustomerDoesNotExist()
+        {
+            // Arrange 
+            var customers = new List<ICustomer>
+    {
+        new Customer
+        (
+            "John",
+            "Doe",
+            "johndoe@example.com",
+            "123-456-7890",
+            "123 Main St",
+            "City",
+            "12345",
+            "Country"
+        )
+    };
 
+            string initialJson = JsonConvert.SerializeObject(customers, Formatting.None, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
+
+            var mockFileService = new Mock<IFileService>();
+            mockFileService.Setup(x => x.GetContentFromFile(It.IsAny<string>())).Returns(initialJson);
+            mockFileService.Setup(x => x.SaveToFile(It.IsAny<string>(), It.IsAny<string>())).Returns(true);
+
+            ICustomerService customerService = new CustomerService(mockFileService.Object);
+
+            // Act 
+            var updateResult = customerService.UpdateCustomer(
+                new Customer
+                (
+                    "Jane",
+                    "Doe",
+                    "janedoe@example.com",
+                    "987-654-3210",
+                    "456 Oak St",
+                    "Town",
+                    "54321",
+                    "AnotherCountry"
+                )
+            );
+
+            // Assert 
+            Assert.Equal(ContactBookServiceResultStatus.NOT_FOUND, updateResult.Status);
+        }
+
+        [Fact]
+        public void PrintCustomerByEmail_ShouldPrintCustomerDetails_WhenCustomerExists()
+        {
+            // Arrange 
+            var customers = new List<ICustomer>
+        {
+            new Customer
+            (
+                "John",
+                "Doe",
+                "johndoe@example.com",
+                "123-456-7890",
+                "123 Main St",
+                "City",
+                "12345",
+                "Country"
+            )
+        };
+
+
+
+
+        }
 
     }
 }

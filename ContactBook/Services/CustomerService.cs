@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.IO;
 using System.Collections.Generic;
 using ContactBook.Enums;
 using ContactBook.Interfaces;
@@ -49,7 +49,7 @@ public class CustomerService : ICustomerService
                     LoadCustomerListFromFile();
                 }
 
-                return _customerList;
+                return _customerList!;
             }
             catch (Exception ex)
             {
@@ -122,7 +122,7 @@ public class CustomerService : ICustomerService
             }
         }
 
-        public ICustomer CustomerByEmail(string email)
+    public ICustomer CustomerByEmail(string email)
         {
             return _customerList.FirstOrDefault(c => c.Email == email)!;
         }
