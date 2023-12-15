@@ -16,23 +16,26 @@ namespace ContactBook.Services
                 else
                 {
                     Debug.WriteLine($"File not found: {filepath}");
+                    throw new FileNotFoundException($"File not found: {filepath}");
                 }
             }
             catch (FileNotFoundException ex)
             {
                 Debug.WriteLine($"File not found: {ex.Message}");
+                throw; // Re-throw the exception to propagate it further
             }
             catch (IOException ex)
             {
                 Debug.WriteLine($"IO error reading file: {ex.Message}");
+                throw; // Re-throw the exception to propagate it further
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"An error occurred reading file: {ex.Message}");
+                throw; // Re-throw the exception to propagate it further
             }
-
-            return null!;
         }
+
 
         public bool SaveToFile(string filePath, string content)
         {

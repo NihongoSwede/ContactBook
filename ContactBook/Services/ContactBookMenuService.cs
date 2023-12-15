@@ -114,6 +114,7 @@ namespace ContactBook.Services
         public void ShowViewCustomerListOption()
         {
             DisplayMenuTitle("View Customer List");
+            
 
             var customers = customerService.GetAllFromList();
 
@@ -123,11 +124,22 @@ namespace ContactBook.Services
             }
             else
             {
-                Console.WriteLine("List of Customers:");
+                
+                
 
                 foreach (var customer in customers)
                 {
-                    Console.WriteLine($"Name: {customer.FirstName} {customer.LastName}, Email: {customer.Email}, Phone: {customer.PhoneNumber}, Phone: {customer.PhoneNumber}, Adress: {customer.Address}, City: {customer.City}, PostalCode: {customer.PostalCode}, Country: {customer.Country}  ");
+                    Console.WriteLine($"Name: {customer.FirstName}, {customer.LastName}");
+                    Console.WriteLine($"Email: {customer.Email}");
+                    Console.WriteLine($"Phone: {customer.PhoneNumber}");
+                    Console.WriteLine($"Address: {customer.Address}");
+                    Console.WriteLine($"City: {customer.City}");
+                    Console.WriteLine($"Postal Code: {customer.PostalCode}");
+                    Console.WriteLine($"Country: {customer.Country}");
+                    Console.WriteLine("");
+                    Console.WriteLine("");
+
+
                 }
             }
 
@@ -248,8 +260,10 @@ namespace ContactBook.Services
             DisplayMenuTitle("Print Customer by Email");
 
             Console.Write("Enter Email to print: ");
-            var emailToPrint = Console.ReadLine();
+            var emailToPrint = Console.ReadLine()!;
+            Console.Clear();
 
+            Console.WriteLine("");   
             customerService.PrintCustomerByEmail(emailToPrint);
 
             Console.WriteLine("\nPress any key to return to the main menu...");

@@ -1,7 +1,6 @@
 ﻿using ContactBook.Interfaces;
 using ContactBook.Services;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 
 class Program
 {
@@ -9,7 +8,7 @@ class Program
     {
         // Setup DI (Dependency Injection) container
         var serviceProvider = new ServiceCollection()
-            .AddSingleton<IFileService, FileService>()  // Replace YourFileService with your actual implementation
+            .AddSingleton<IFileService, FileService>()  
             .AddSingleton<ICustomerService, CustomerService>()
             .AddSingleton<IContactMenuService, ContactBookMenuService>()
             .BuildServiceProvider();
