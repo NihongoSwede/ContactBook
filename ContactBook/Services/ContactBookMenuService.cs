@@ -3,9 +3,14 @@ using ContactBook.Interfaces;
 
 namespace ContactBook.Services
 {
-    public class ContactBookMenuService(ICustomerService customerService) : IContactMenuService
+    public class ContactBookMenuService : IContactMenuService
     {
-        private readonly ICustomerService customerService = customerService;
+        private readonly ICustomerService _customerService;
+
+        public ContactBookMenuService(ICustomerService customerService)
+        {
+            _customerService = customerService;
+        }
 
         public void ShowMainMenu()
         {
@@ -96,7 +101,7 @@ namespace ContactBook.Services
             var newCustomer = new Customer(firstName, lastName, email, phoneNumber, address, city, postalCode, country);
 
             // Add the customer to the list
-            var result = customerService.AddToList(newCustomer); // Use the newly created customer
+            var result = _customerService.AddToList(newCustomer); 
 
             if (result)
             {
@@ -113,38 +118,28 @@ namespace ContactBook.Services
 
         public void ShowViewCustomerListOption()
         {
+            
             DisplayMenuTitle("View Customer List");
 
-            var customers = customerService.GetAllFromList();
+            
+            var customers = _customerService.GetAllFromList();
 
-            if (customers == null || !customers.Any())
+            if (customers == null)
             {
                 Console.WriteLine("No customers in the list.");
             }
             else
             {
+                Console.Clear();
                 foreach (var customer in customers)
                 {
                     Console.WriteLine($"Name: {customer.FirstName}, {customer.LastName}");
                     Console.WriteLine($"Email: {customer.Email}");
                     Console.WriteLine($"Phone: {customer.PhoneNumber}");
                     Console.WriteLine($"Address: {customer.Address}");
-
-                    if (!string.IsNullOrEmpty(customer.City))
-                    {
-                        Console.WriteLine($"City: {customer.City}");
-                    }
-
-                    if (!string.IsNullOrEmpty(customer.PostalCode))
-                    {
-                        Console.WriteLine($"Postal Code: {customer.PostalCode}");
-                    }
-
-                    if (!string.IsNullOrEmpty(customer.Country))
-                    {
-                        Console.WriteLine($"Country: {customer.Country}");
-                    }
-
+                    Console.WriteLine($"City: {customer.City}");
+                    Console.WriteLine($"PostalCode: {customer.PostalCode}");
+                    Console.WriteLine($"Country: {customer.Country}");
                     Console.WriteLine();
                 }
             }
@@ -163,7 +158,7 @@ namespace ContactBook.Services
             Console.Write("Enter Email to delete: ");
             var emailToDelete = Console.ReadLine();
 
-            var result = customerService.DeleteCustomerByEmail(emailToDelete!);
+            var result = _customerService.DeleteCustomerByEmail(emailToDelete!);
 
             if (result.Status == ContactBookServiceResultStatus.SUCCEDED)
             {
@@ -186,7 +181,7 @@ namespace ContactBook.Services
             Console.Write("Enter Email of the customer to change: ");
             var emailToChange = Console.ReadLine();
 
-            var existingCustomer = customerService.GetAllFromList()?.FirstOrDefault(c => c.Email == emailToChange);
+            var existingCustomer = _customerService.GetAllFromList()?.FirstOrDefault(c => c.Email == emailToChange);
 
             if (existingCustomer != null)
             {
@@ -244,7 +239,7 @@ namespace ContactBook.Services
                     existingCustomer.PostalCode = newPostalCode;
                 }
 
-                var updateResult = customerService.UpdateCustomer(existingCustomer);
+                var updateResult = _customerService.UpdateCustomer(existingCustomer);
 
                 if (updateResult.Status == ContactBookServiceResultStatus.SUCCEDED)
                 {
@@ -273,7 +268,7 @@ namespace ContactBook.Services
             Console.Clear();
 
             Console.WriteLine("");
-            customerService.PrintCustomerByEmail(emailToPrint);
+            _customerService.PrintCustomerByEmail(emailToPrint);
 
             Console.WriteLine("\nPress any key to return to the main menu...");
             Console.ReadKey();
@@ -285,5 +280,7 @@ namespace ContactBook.Services
             Console.WriteLine($"## {title} ##");
             Console.WriteLine();
         }
+
+        
     }
 }

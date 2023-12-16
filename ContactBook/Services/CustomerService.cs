@@ -13,12 +13,14 @@ public class CustomerService : ICustomerService
     private readonly string _filePath;
     private List<ICustomer> _customerList;
 
-    public CustomerService(IFileService fileService, string filePath = @"c:\Users\mhede\source\repos\ContactBook\customers.json")
+    public CustomerService(IFileService fileService, string filePath = @"C:\Users\mhede\source\repos\ContactBook\customers.json")
     {
         _fileService = fileService;
         _filePath = filePath;
         LoadCustomerListFromFile();
     }
+
+    //Function that helps to save the user and load user info 
 
     public void SaveCustomerListToFile()
     {
@@ -30,6 +32,27 @@ public class CustomerService : ICustomerService
         _fileService.SaveToFile(_filePath, json);
     }
 
+    public void LoadCustomerListFromFile()
+    {
+        var content = _fileService.GetContentFromFile(_filePath);
+
+        try
+        {
+            var loadedList = JsonConvert.DeserializeObject<List<ICustomer>>(content, new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.Objects,
+            });
+
+            _customerList = loadedList?.GroupBy(c => c.Email).Select(g => g.First()).ToList() ?? [];
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error deserializing customer list: {ex.Message}");
+            _customerList = [];
+        }
+    }
+
+    //Function that are related to the service itself 
     public bool AddToList(ICustomer customer)
     {
         if (customer == null)
@@ -118,23 +141,4 @@ public class CustomerService : ICustomerService
         return _customerList.FirstOrDefault(c => c.Email == email)!;
     }
 
-    public void LoadCustomerListFromFile()
-    {
-        var content = _fileService.GetContentFromFile(_filePath);
-
-        try
-        {
-            var loadedList = JsonConvert.DeserializeObject<List<ICustomer>>(content, new JsonSerializerSettings
-            {
-                TypeNameHandling = TypeNameHandling.Objects,
-            });
-
-            _customerList = loadedList?.GroupBy(c => c.Email).Select(g => g.First()).ToList() ?? [];
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"Error deserializing customer list: {ex.Message}");
-            _customerList = [];
-        }
-    }
 }
