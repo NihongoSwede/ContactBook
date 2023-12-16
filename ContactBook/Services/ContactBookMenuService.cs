@@ -130,7 +130,7 @@ namespace ContactBook.Services
             }
             else
             {
-                Console.Clear();
+                
                 foreach (var customer in customers)
                 {
                     Console.WriteLine($"Name: {customer.FirstName}, {customer.LastName}");
