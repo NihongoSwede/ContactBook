@@ -38,7 +38,7 @@ namespace ContactBook.Tests
             var mockFileService = new Mock<IFileService>();
             mockFileService.Setup(x => x.GetContentFromFile(It.IsAny<string>())).Returns("JSON_CONTENT_WITH_DUPLICATE_USER");
 
-            var customerService = new CustomerService(mockFileService.Object);
+            var customerService = new CustomerService(mockFileService.Object)!;
 
             // Act
             customerService.LoadCustomerListFromFile();
@@ -48,7 +48,7 @@ namespace ContactBook.Tests
 
             // Check for duplicates based on email
             var distinctCustomers = new HashSet<ICustomer>();
-            foreach (var customer in loadedCustomers)
+            foreach (var customer in loadedCustomers!)
             {
                 Assert.True(distinctCustomers.Add(customer), $"Duplicate customer with email {customer.Email} found.");
             }

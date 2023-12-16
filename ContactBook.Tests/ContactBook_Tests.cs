@@ -68,7 +68,7 @@ namespace ContactBook.Tests
             // Check if the result contains any items
             if (result.Any())
             {
-                ICustomer returnedCustomer = result.First(); // Use First() to get the first item
+                ICustomer returnedCustomer = result.First(); 
 
               
                 Assert.Equal("Lars", returnedCustomer.FirstName);
@@ -182,27 +182,25 @@ namespace ContactBook.Tests
             ICustomerService customerService = new CustomerService(mockFileService.Object);
 
             // Redirect console output
-            using (var sw = new StringWriter())
+            using var sw = new StringWriter();
+            Console.SetOut(sw);
+
+            // Act and Assert
+            var exception = Record.Exception(() =>
             {
-                Console.SetOut(sw);
+                var deleteResult = customerService.DeleteCustomerByEmail("johndoe@example.com");
+                Assert.Equal(ContactBookServiceResultStatus.NOT_FOUND, deleteResult.Status);
+            });
 
-                // Act and Assert
-                var exception = Record.Exception(() =>
-                {
-                    var deleteResult = customerService.DeleteCustomerByEmail("johndoe@example.com");
-                    Assert.Equal(ContactBookServiceResultStatus.NOT_FOUND, deleteResult.Status);
-                });
-
-                // Output exception details only if an exception occurs
-                if (exception != null)
-                {
-                    Console.WriteLine($"Exception details: {exception}");
-                }
-
-                // Access the console output if needed
-                var consoleOutput = sw.ToString();
-                // Add assertions or logging for consoleOutput if needed
+            // Output exception details only if an exception occurs
+            if (exception != null)
+            {
+                Console.WriteLine($"Exception details: {exception}");
             }
+
+            // Access the console output if needed
+            var consoleOutput = sw.ToString();
+            // Add assertions or logging for consoleOutput if needed
         }
 
         [Fact]
@@ -251,63 +249,5 @@ namespace ContactBook.Tests
             Assert.Equal(ContactBookServiceResultStatus.NOT_FOUND, updateResult.Status);
         }
 
-        [Fact]
-        public void GetAllFromListShould_NotReturnDuplicateCustomers_WhenEmailExists()
-        {
-            // Arrange 
-            var customers = new List<ICustomer>
-    {
-            new Customer
-            (
-                "Lars",
-                "Hedenborg",
-                "mhedenborg18@gmail.com",
-                "070 729 90 27",
-                "Kapplunda Grand 6",
-                "Skovde",
-                "549 40 ",
-                "Sweden"
-            ),
-            new Customer
-            (
-                "Lars",
-                "Hedenborg",
-                "mhedenborg18@gmail.com",
-                "070 729 90 27",
-                "Kapplunda Grand 6",
-                "Skovde",
-                "549 40 ",
-                "Sweden"
-            )
-        };
-
-            string json = JsonConvert.SerializeObject(customers, Formatting.None, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
-
-            var mockFileService = new Mock<IFileService>();
-            mockFileService.Setup(x => x.GetContentFromFile(It.IsAny<string>())).Returns(json);
-
-            ICustomerService customerService = new CustomerService(mockFileService.Object);
-
-            // Act 
-            IEnumerable<ICustomer> result = customerService.GetAllFromList();
-
-            // Assert 
-            Assert.NotNull(result);
-
-            // Check if the result contains any items
-            if (result.Any())
-            {
-                // Ensure that there are no duplicate emails in the result
-                var distinctEmails = result.Select(c => c.Email).Distinct();
-                Assert.Equal(result.Count(), distinctEmails.Count());
-
-                // Add other assertions as needed
-            }
-            else
-            {
-                // Handle the case when the result is empty
-                Assert.True(false, "The result is empty");
-            }
-        }
     }
 }

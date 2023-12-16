@@ -114,7 +114,6 @@ namespace ContactBook.Services
         public void ShowViewCustomerListOption()
         {
             DisplayMenuTitle("View Customer List");
-            
 
             var customers = customerService.GetAllFromList();
 
@@ -124,28 +123,38 @@ namespace ContactBook.Services
             }
             else
             {
-                
-                
-
                 foreach (var customer in customers)
                 {
                     Console.WriteLine($"Name: {customer.FirstName}, {customer.LastName}");
                     Console.WriteLine($"Email: {customer.Email}");
                     Console.WriteLine($"Phone: {customer.PhoneNumber}");
                     Console.WriteLine($"Address: {customer.Address}");
-                    Console.WriteLine($"City: {customer.City}");
-                    Console.WriteLine($"Postal Code: {customer.PostalCode}");
-                    Console.WriteLine($"Country: {customer.Country}");
-                    Console.WriteLine("");
-                    Console.WriteLine("");
 
+                    if (!string.IsNullOrEmpty(customer.City))
+                    {
+                        Console.WriteLine($"City: {customer.City}");
+                    }
 
+                    if (!string.IsNullOrEmpty(customer.PostalCode))
+                    {
+                        Console.WriteLine($"Postal Code: {customer.PostalCode}");
+                    }
+
+                    if (!string.IsNullOrEmpty(customer.Country))
+                    {
+                        Console.WriteLine($"Country: {customer.Country}");
+                    }
+
+                    Console.WriteLine();
                 }
             }
 
             Console.WriteLine("\nPress any key to return to the main menu...");
             Console.ReadKey();
         }
+
+
+
 
         public void DeleteCustomerByEmailOption()
         {
@@ -263,7 +272,7 @@ namespace ContactBook.Services
             var emailToPrint = Console.ReadLine()!;
             Console.Clear();
 
-            Console.WriteLine("");   
+            Console.WriteLine("");
             customerService.PrintCustomerByEmail(emailToPrint);
 
             Console.WriteLine("\nPress any key to return to the main menu...");

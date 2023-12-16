@@ -2,140 +2,95 @@
 using ContactBook.Interfaces;
 using ContactBook.Models.Responses;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 public class CustomerService : ICustomerService
 {
     private readonly IFileService _fileService;
     private readonly string _filePath;
-
-    private List<ICustomer> _customerList = new List<ICustomer>();
+    private List<ICustomer> _customerList;
 
     public CustomerService(IFileService fileService, string filePath = @"c:\Users\mhede\source\repos\ContactBook\customers.json")
     {
-        _fileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
+        _fileService = fileService;
         _filePath = filePath;
-
-        // Load customers from file during construction
         LoadCustomerListFromFile();
+    }
+
+    public void SaveCustomerListToFile()
+    {
+        var json = JsonConvert.SerializeObject(_customerList, new JsonSerializerSettings
+        {
+            TypeNameHandling = TypeNameHandling.Objects,
+        });
+
+        _fileService.SaveToFile(_filePath, json);
     }
 
     public bool AddToList(ICustomer customer)
     {
-        try
+        if (customer == null)
         {
-            // Check if a customer with the same email already exists
-            if (_customerList.Any(c => c.Email == customer.Email))
-            {
-                Debug.WriteLine($"Customer with email {customer.Email} already exists.");
-                return false;
-            }
-
-            _customerList.Add(customer);
-            SaveCustomerListToFile();
-            return true;
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"Error adding customer to list: {ex.Message}");
+            Debug.WriteLine("Customer is null.");
             return false;
         }
+
+        if (_customerList.Contains(customer))
+        {
+            Debug.WriteLine($"Customer with email {customer.Email} already exists.");
+            return false;
+        }
+
+        _customerList.Add(customer);
+        SaveCustomerListToFile();
+        return true;
     }
-
-
 
     public IEnumerable<ICustomer> GetAllFromList()
     {
-        try
-        {
-            if (_customerList != null && _customerList.Count != 0)
-            {
-                CheckForDuplicates();
-                return _customerList!;
-            }
-
-            LoadCustomerListFromFile();
-
-            CheckForDuplicates();
-
-            return _customerList!;
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"Error getting all customers from list: {ex.Message}");
-            return Enumerable.Empty<ICustomer>();
-        }
+        
+        return _customerList;
     }
-
-    private void CheckForDuplicates()
-    {
-        // Check for duplicates based on email
-        var duplicateEmails = new HashSet<string>();
-        var distinctCustomers = new List<ICustomer>();
-
-        foreach (var customer in _customerList)
-        {
-            if (!duplicateEmails.Add(customer.Email))
-            {
-                Debug.WriteLine($"Duplicate customer with email {customer.Email} found.");
-            }
-            else
-            {
-                distinctCustomers.Add(customer);
-            }
-        }
-
-        // Update _customerList with distinct customers
-        _customerList.Clear();
-        _customerList.AddRange(distinctCustomers);
-    }
-
-
 
     public ContactBookServiceResult DeleteCustomerByEmail(string email)
     {
-        ContactBookServiceResult response = new ContactBookServiceResult()!;
+        var response = new ContactBookServiceResult();
+        var customerToRemove = _customerList.FirstOrDefault(c => c.Email == email);
 
-        try
+        if (customerToRemove != null)
         {
-            var customerToRemove = _customerList.FirstOrDefault(c => c.Email == email);
-
-            if (customerToRemove != null)
-            {
-                _customerList.Remove(customerToRemove);
-                SaveCustomerListToFile();
-                response.Status = ContactBookServiceResultStatus.SUCCEDED;
-            }
-            else
-            {
-                response.Status = ContactBookServiceResultStatus.NOT_FOUND;
-            }
+            _customerList.Remove(customerToRemove);
+            SaveCustomerListToFile();
+            response.Status = ContactBookServiceResultStatus.SUCCEDED;
         }
-        catch (Exception ex)
+        else
         {
-            Debug.WriteLine($"Error deleting customer by email: {ex.Message}");
-            response.Status = ContactBookServiceResultStatus.Failed;
+            response.Status = ContactBookServiceResultStatus.NOT_FOUND;
         }
 
         return response;
     }
 
-
-
     public ContactBookServiceResult UpdateCustomer(ICustomer updatedCustomer)
     {
+        var response = new ContactBookServiceResult();
         int index = _customerList.FindIndex(customer => customer.Email == updatedCustomer.Email);
 
         if (index != -1)
         {
             _customerList[index] = updatedCustomer;
             SaveCustomerListToFile();
-            return new ContactBookServiceResult { Status = ContactBookServiceResultStatus.SUCCEDED };
+            response.Status = ContactBookServiceResultStatus.SUCCEDED;
         }
         else
         {
-            return new ContactBookServiceResult { Status = ContactBookServiceResultStatus.NOT_FOUND };
+            response.Status = ContactBookServiceResultStatus.NOT_FOUND;
         }
+
+        return response;
     }
 
     public void PrintCustomerByEmail(string email)
@@ -163,50 +118,23 @@ public class CustomerService : ICustomerService
         return _customerList.FirstOrDefault(c => c.Email == email)!;
     }
 
-    public void SaveCustomerListToFile()
-    {
-        var json = JsonConvert.SerializeObject(_customerList, new JsonSerializerSettings
-        {
-            TypeNameHandling = TypeNameHandling.Objects,
-        });
-
-        _fileService.SaveToFile(_filePath, json);
-    }
-
     public void LoadCustomerListFromFile()
     {
         var content = _fileService.GetContentFromFile(_filePath);
 
-        if (!string.IsNullOrEmpty(content))
+        try
         {
-            try
+            var loadedList = JsonConvert.DeserializeObject<List<ICustomer>>(content, new JsonSerializerSettings
             {
-                var loadedList = JsonConvert.DeserializeObject<List<ICustomer>>(content, new JsonSerializerSettings
-                {
-                    TypeNameHandling = TypeNameHandling.Objects,
-                });
+                TypeNameHandling = TypeNameHandling.Objects,
+            });
 
-                Debug.WriteLine($"Loaded {loadedList!.Count} customers from file.");
-
-                // Clear the existing list before adding loaded items
-                _customerList.Clear();
-
-                if (loadedList != null)
-                {
-                    // Use LINQ to filter out duplicate customers based on email
-                    var distinctCustomers = loadedList.GroupBy(c => c.Email).Select(g => g.First()).ToList();
-                    _customerList.AddRange(distinctCustomers);
-
-                    Debug.WriteLine($"After filtering, {_customerList.Count} distinct customers remain.");
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Error deserializing customer list: {ex.Message}");
-            }
+            _customerList = loadedList?.GroupBy(c => c.Email).Select(g => g.First()).ToList() ?? [];
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error deserializing customer list: {ex.Message}");
+            _customerList = [];
         }
     }
-
-
-
 }
