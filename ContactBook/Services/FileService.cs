@@ -5,9 +5,10 @@ namespace ContactBook.Services
 {
     public class FileService : IFileService
     {
-
+        //This here is used to retrieve content from file 
         public string GetContentFromFile(string filepath)
         {
+
             try
             {
                 return File.ReadAllText(filepath);
@@ -29,7 +30,7 @@ namespace ContactBook.Services
             }
         }
 
-
+        //This function here saves the content to the file 
         public bool SaveToFile(string filePath, string content)
         {
             try
@@ -49,7 +50,7 @@ namespace ContactBook.Services
             return false;
         }
 
-
+        //This function here edits the file content 
         public bool EditFileContent(string filepath, string originalContent, string editedContent)
         {
             try

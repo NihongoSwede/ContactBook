@@ -2,25 +2,27 @@
 using ContactBook.Interfaces;
 using ContactBook.Models.Responses;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Linq;
+using System.Runtime.CompilerServices;
 
 public class CustomerService : ICustomerService
 {
-    private readonly IFileService _fileService;
-    private readonly string _filePath;
-    private List<ICustomer> _customerList;
+    public readonly IFileService _fileService;
+    public readonly string _filePath;
+    public List<ICustomer> _customerList;
+
+    // This is my initialization of the variables that are used to create the filepath 
 
     public CustomerService(IFileService fileService, string filePath = @"C:\Users\mhede\source\repos\ContactBook\customers.json")
     {
         _fileService = fileService;
         _filePath = filePath;
+
         LoadCustomerListFromFile();
     }
 
-    //Function that helps to save the user and load user info 
+    //Function that helps to save any changes made to the data  
 
     public void SaveCustomerListToFile()
     {
@@ -32,6 +34,7 @@ public class CustomerService : ICustomerService
         _fileService.SaveToFile(_filePath, json);
     }
 
+    // This function helps to load the data 
     public void LoadCustomerListFromFile()
     {
         var content = _fileService.GetContentFromFile(_filePath);
@@ -43,7 +46,7 @@ public class CustomerService : ICustomerService
                 TypeNameHandling = TypeNameHandling.Objects,
             });
 
-            _customerList = loadedList?.GroupBy(c => c.Email).Select(g => g.First()).ToList() ?? [];
+            _customerList = loadedList?.GroupBy(c => c.Email).SelectMany(g => g.Take(1)).ToList() ?? [];
         }
         catch (Exception ex)
         {
@@ -72,12 +75,14 @@ public class CustomerService : ICustomerService
         return true;
     }
 
+    // This function gets all the data as a readable list 
     public IEnumerable<ICustomer> GetAllFromList()
     {
         
-        return _customerList;
+        return new ReadOnlyCollection<ICustomer>(_customerList);
     }
 
+    // This function here deletes the data basd on an input from email 
     public ContactBookServiceResult DeleteCustomerByEmail(string email)
     {
         var response = new ContactBookServiceResult();
@@ -97,6 +102,7 @@ public class CustomerService : ICustomerService
         return response;
     }
 
+    // This function updates the user based on input 
     public ContactBookServiceResult UpdateCustomer(ICustomer updatedCustomer)
     {
         var response = new ContactBookServiceResult();
@@ -116,6 +122,7 @@ public class CustomerService : ICustomerService
         return response;
     }
 
+    // This function prints out the user based on email 
     public void PrintCustomerByEmail(string email)
     {
         var customer = _customerList.FirstOrDefault(c => c.Email == email);
@@ -134,11 +141,6 @@ public class CustomerService : ICustomerService
         {
             Console.WriteLine("Customer not found.");
         }
-    }
-
-    public ICustomer CustomerByEmail(string email)
-    {
-        return _customerList.FirstOrDefault(c => c.Email == email)!;
     }
 
 }

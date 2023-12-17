@@ -3,15 +3,11 @@ using ContactBook.Interfaces;
 
 namespace ContactBook.Services
 {
-    public class ContactBookMenuService : IContactMenuService
+    public class ContactBookMenuService(ICustomerService customerService) : IContactMenuService
     {
-        private readonly ICustomerService _customerService;
+        private readonly ICustomerService _customerService = customerService;
 
-        public ContactBookMenuService(ICustomerService customerService)
-        {
-            _customerService = customerService;
-        }
-
+        // this part shows the main menu 
         public void ShowMainMenu()
         {
             while (true)
@@ -56,6 +52,7 @@ namespace ContactBook.Services
             }
         }
 
+        // I use this to exit the application 
         public void ShowExitApplicationOption()
         {
             Console.Clear();
@@ -116,21 +113,20 @@ namespace ContactBook.Services
             Console.ReadKey();
         }
 
+
+
         public void ShowViewCustomerListOption()
         {
-            
             DisplayMenuTitle("View Customer List");
 
-            
             var customers = _customerService.GetAllFromList();
 
-            if (customers == null)
+            if (customers == null || !customers.Any())
             {
                 Console.WriteLine("No customers in the list.");
             }
             else
             {
-                
                 foreach (var customer in customers)
                 {
                     Console.WriteLine($"Name: {customer.FirstName}, {customer.LastName}");
@@ -147,6 +143,7 @@ namespace ContactBook.Services
             Console.WriteLine("\nPress any key to return to the main menu...");
             Console.ReadKey();
         }
+        
 
 
 

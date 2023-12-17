@@ -6,13 +6,14 @@ namespace ContactBook.Interfaces
     {
         bool AddToList(ICustomer customer);
         IEnumerable<ICustomer> GetAllFromList();
+        
         ContactBookServiceResult DeleteCustomerByEmail(string email);
        
         ContactBookServiceResult UpdateCustomer(ICustomer updatedCustomer);
 
         void PrintCustomerByEmail(string email);
 
-        ICustomer CustomerByEmail(string email);
+        
 
         
 
