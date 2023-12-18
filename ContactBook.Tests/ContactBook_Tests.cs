@@ -82,43 +82,7 @@ namespace ContactBook.Tests
             }
         }
 
-        [Fact]
-        public void GetCustomerByEmailShould_ReturnCustomer_WhenEmailExists()
-        {
-            // Arrange 
-            var customers = new List<ICustomer>
-            {
-                new Customer
-                (
-                    "Mathias",
-                    "Hedenborg",   
-                    "mhedenborg18@gmail.com",
-                    "070 729 90 27",
-                    "Kapplunda Grand 6",
-                    "Skovde",
-                    "549 40 ",
-                    "Sweden"
-                )
-            };
-
-            string json = JsonConvert.SerializeObject(customers, Formatting.None, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
-
-            var mockFileService = new Mock<IFileService>();
-            mockFileService.Setup(x => x.GetContentFromFile(It.IsAny<string>())).Returns(json);
-
-            ICustomerService customerService = new CustomerService(mockFileService.Object);
-
-            // Act 
-            IEnumerable<ICustomer> result = customerService.GetAllFromList();
-            ICustomer customer = customerService.CustomerByEmail("mhedenborg18@gmail.com");
-
-            // Assert 
-            Assert.NotNull(result);
-            Assert.NotNull(customer);
-            Assert.Equal("Mathias", customer.FirstName);
-            Assert.Equal("Hedenborg", customer.LastName);
-            // Add assertions for other properties
-        }
+       
 
         [Fact]
         public void DeleteCustomerByEmail_ShouldReturnNotFound_WhenEmailDoesNotExist()

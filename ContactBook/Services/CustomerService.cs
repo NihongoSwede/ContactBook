@@ -10,7 +10,7 @@ public class CustomerService : ICustomerService
 {
     public readonly IFileService _fileService;
     public readonly string _filePath;
-    public List<ICustomer> _customerList;
+    public List<ICustomer>? _customerList;
 
     // This is my initialization of the variables that are used to create the filepath 
 
@@ -79,7 +79,7 @@ public class CustomerService : ICustomerService
     public IEnumerable<ICustomer> GetAllFromList()
     {
         
-        return new ReadOnlyCollection<ICustomer>(_customerList);
+        return _customerList;
     }
 
     // This function here deletes the data basd on an input from email 
