@@ -1,5 +1,6 @@
 ﻿using ContactBook.Enums;
 using ContactBook.Interfaces;
+using System.Linq;
 
 namespace ContactBook.Services
 {
@@ -121,16 +122,12 @@ namespace ContactBook.Services
 
             var customers = _customerService.GetAllFromList();
 
+            int count = 1;
+
             foreach (var customer in customers)
             {
-                Console.WriteLine($"Name: {customer.FirstName}, {customer.LastName}");
-                Console.WriteLine($"Email: {customer.Email}");
-                Console.WriteLine($"Phone: {customer.PhoneNumber}");
-                Console.WriteLine($"Address: {customer.Address}");
-                Console.WriteLine($"City: {customer.City}");
-                Console.WriteLine($"PostalCode: {customer.PostalCode}");
-                Console.WriteLine($"Country: {customer.Country}");
-                Console.WriteLine();
+                Console.WriteLine($"#{count} - Customer: {customer.FirstName} {customer.LastName}, Email: {customer.Email}, Phone: {customer.PhoneNumber}");
+                count++;
             }
 
 
@@ -180,7 +177,15 @@ namespace ContactBook.Services
             if (existingCustomer != null)
             {
                 Console.WriteLine($"Current Information for Email {emailToChange}:");
-                Console.WriteLine($"Name: {existingCustomer.FirstName} {existingCustomer.LastName}, Email: {existingCustomer.Email}, Phone: {existingCustomer.PhoneNumber}, Address: {existingCustomer.Address}, City: {existingCustomer.City}, PostalCode: {existingCustomer.PostalCode}, Country: {existingCustomer.Country}");
+                Console.Clear();
+                Console.WriteLine($"Customer Information:\n" +
+                  $"  Name: {existingCustomer.FirstName} {existingCustomer.LastName}\n" +
+                  $"  Email: {existingCustomer.Email}\n" +
+                  $"  Phone: {existingCustomer.PhoneNumber}\n" +
+                  $"  Address: {existingCustomer.Address}\n" +
+                  $"  City: {existingCustomer.City}\n" +
+                  $"  PostalCode: {existingCustomer.PostalCode}\n" +
+                  $"  Country: {existingCustomer.Country}");
 
                 Console.WriteLine();
 

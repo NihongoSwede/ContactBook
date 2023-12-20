@@ -19,8 +19,8 @@ public class CustomerService : ICustomerService
         _fileService = fileService;
         _filePath = filePath;
 
-
         LoadCustomerListFromFile();
+
     }
 
     //Function that helps to save any changes made to the data  
