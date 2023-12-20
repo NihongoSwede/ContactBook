@@ -6,8 +6,7 @@ class Program
 {
     static void Main()
     {
-        try
-        {
+        
             // Setup DI (Dependency Injection) container
             var serviceProvider = SetupDependencyInjection;
 
@@ -16,11 +15,8 @@ class Program
 
             // Call the main menu method
             menuService.ShowMainMenu();
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"An error occurred: {ex.Message}");
-        }
+        
+        
     }
 
     private static IServiceProvider SetupDependencyInjection

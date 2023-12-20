@@ -1,6 +1,6 @@
 ﻿namespace ContactBook.Interfaces
 {
-    public interface ICustomer : IEquatable<ICustomer>
+    public interface ICustomer
     {
         string FirstName { get; set; }
         string LastName { get; set; }
@@ -10,7 +10,5 @@
         string City { get; set; }
         string PostalCode { get; set; }
         string Country { get; set; }
-
-        new bool Equals(ICustomer other);
     }
 }

@@ -121,24 +121,21 @@ namespace ContactBook.Services
 
             var customers = _customerService.GetAllFromList();
 
-            if (customers == null || !customers.Any())
+            foreach (var customer in customers)
             {
-                Console.WriteLine("No customers in the list.");
+                Console.WriteLine($"Name: {customer.FirstName}, {customer.LastName}");
+                Console.WriteLine($"Email: {customer.Email}");
+                Console.WriteLine($"Phone: {customer.PhoneNumber}");
+                Console.WriteLine($"Address: {customer.Address}");
+                Console.WriteLine($"City: {customer.City}");
+                Console.WriteLine($"PostalCode: {customer.PostalCode}");
+                Console.WriteLine($"Country: {customer.Country}");
+                Console.WriteLine();
             }
-            else
-            {
-                foreach (var customer in customers)
-                {
-                    Console.WriteLine($"Name: {customer.FirstName}, {customer.LastName}");
-                    Console.WriteLine($"Email: {customer.Email}");
-                    Console.WriteLine($"Phone: {customer.PhoneNumber}");
-                    Console.WriteLine($"Address: {customer.Address}");
-                    Console.WriteLine($"City: {customer.City}");
-                    Console.WriteLine($"PostalCode: {customer.PostalCode}");
-                    Console.WriteLine($"Country: {customer.Country}");
-                    Console.WriteLine();
-                }
-            }
+
+
+
+
 
             Console.WriteLine("\nPress any key to return to the main menu...");
             Console.ReadKey();

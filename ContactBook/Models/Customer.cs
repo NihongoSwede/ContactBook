@@ -20,13 +20,5 @@ public class Customer(
     public string PostalCode { get; set; } = postalCode;
     public string Country { get; set; } = country;
 
-
-
-    public bool Equals(ICustomer other)
-    {
-        if (other == null)
-            return false;
-
-        return Email.Equals(other.Email, StringComparison.OrdinalIgnoreCase);
-    }
+    
 }

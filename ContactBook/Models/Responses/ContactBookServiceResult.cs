@@ -9,7 +9,7 @@ namespace ContactBook.Models.Responses
         public bool Success { get; set; }
         public List<ICustomer>? Result { get; set; }
         public Enums.ContactBookServiceResultStatus Status { get; set; }
-        object? IContactServiceResult.Result { get; set; }
+        object ? IContactServiceResult.Result { get; set; }
         ContactBookServiceResultStatus IContactServiceResult.Status { get; set; }
     }
 }

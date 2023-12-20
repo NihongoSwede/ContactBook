@@ -10,7 +10,7 @@ public class CustomerService : ICustomerService
 {
     public readonly IFileService _fileService;
     public readonly string _filePath;
-    public List<ICustomer>? _customerList;
+    public List<ICustomer>? _customerList = new List<ICustomer>();
 
     // This is my initialization of the variables that are used to create the filepath 
 
@@ -18,6 +18,7 @@ public class CustomerService : ICustomerService
     {
         _fileService = fileService;
         _filePath = filePath;
+
 
         LoadCustomerListFromFile();
     }
@@ -37,16 +38,13 @@ public class CustomerService : ICustomerService
     // This function helps to load the data 
     public void LoadCustomerListFromFile()
     {
-        var content = _fileService.GetContentFromFile(_filePath);
-
         try
         {
-            var loadedList = JsonConvert.DeserializeObject<List<ICustomer>>(content, new JsonSerializerSettings
+            var content = _fileService.GetContentFromFile(_filePath);
+            _customerList = JsonConvert.DeserializeObject<List<ICustomer>>(content, new JsonSerializerSettings
             {
                 TypeNameHandling = TypeNameHandling.Objects,
-            });
-
-            _customerList = loadedList?.GroupBy(c => c.Email).SelectMany(g => g.Take(1)).ToList() ?? [];
+            }) ?? [];
         }
         catch (Exception ex)
         {
@@ -54,6 +52,7 @@ public class CustomerService : ICustomerService
             _customerList = [];
         }
     }
+
 
     //Function that are related to the service itself 
     public bool AddToList(ICustomer customer)
@@ -64,7 +63,7 @@ public class CustomerService : ICustomerService
             return false;
         }
 
-        if (_customerList.Contains(customer))
+        if (_customerList!.Contains(customer))
         {
             Debug.WriteLine($"Customer with email {customer.Email} already exists.");
             return false;
@@ -79,18 +78,19 @@ public class CustomerService : ICustomerService
     public IEnumerable<ICustomer> GetAllFromList()
     {
         
-        return _customerList;
+        return _customerList!;
+
     }
 
     // This function here deletes the data basd on an input from email 
     public ContactBookServiceResult DeleteCustomerByEmail(string email)
     {
         var response = new ContactBookServiceResult();
-        var customerToRemove = _customerList.FirstOrDefault(c => c.Email == email);
+        var customerToRemove = _customerList!.FirstOrDefault(c => c.Email == email);
 
         if (customerToRemove != null)
         {
-            _customerList.Remove(customerToRemove);
+            _customerList!.Remove(customerToRemove);
             SaveCustomerListToFile();
             response.Status = ContactBookServiceResultStatus.SUCCEDED;
         }
@@ -106,7 +106,7 @@ public class CustomerService : ICustomerService
     public ContactBookServiceResult UpdateCustomer(ICustomer updatedCustomer)
     {
         var response = new ContactBookServiceResult();
-        int index = _customerList.FindIndex(customer => customer.Email == updatedCustomer.Email);
+        int index = _customerList!.FindIndex(customer => customer.Email == updatedCustomer.Email);
 
         if (index != -1)
         {
@@ -125,7 +125,7 @@ public class CustomerService : ICustomerService
     // This function prints out the user based on email 
     public void PrintCustomerByEmail(string email)
     {
-        var customer = _customerList.FirstOrDefault(c => c.Email == email);
+        var customer = _customerList!.FirstOrDefault(c => c.Email == email);
 
         if (customer != null)
         {
