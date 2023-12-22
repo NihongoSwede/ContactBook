@@ -10,7 +10,7 @@ public class CustomerService : ICustomerService
 {
     public readonly IFileService _fileService;
     public readonly string _filePath;
-    public List<ICustomer>? _customerList = new List<ICustomer>();
+    public List<ICustomer>? _customerList = [];
 
     // This is my initialization of the variables that are used to create the filepath 
 

@@ -6,7 +6,7 @@ namespace ContactBook.Services
 {
     public class ContactBookMenuService(ICustomerService customerService) : IContactMenuService
     {
-        private readonly ICustomerService _customerService = customerService;
+        public ICustomerService _customerService = customerService;
 
         // this part shows the main menu 
         public void ShowMainMenu()
@@ -124,6 +124,7 @@ namespace ContactBook.Services
 
             int count = 1;
 
+            //This loop creates a customer and adds a index through a count 
             foreach (var customer in customers)
             {
                 Console.WriteLine($"#{count} - Customer: {customer.FirstName} {customer.LastName}, Email: {customer.Email}, Phone: {customer.PhoneNumber}");
@@ -165,6 +166,7 @@ namespace ContactBook.Services
             }
         }
 
+        //This part can change a existing customer 
         public void ShowChangeCustomerOption()
         {
             DisplayMenuTitle("Change Customer Information");
