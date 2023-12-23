@@ -3,9 +3,16 @@ using ContactBook.Interfaces;
 
 namespace ContactBook.Services
 {
-    public class ContactBookMenuService(ICustomerService customerService) : IContactMenuService
+    public class ContactBookMenuService : IContactMenuService
     {
-        public ICustomerService _customerService = customerService;
+        //I set up dependency injection here to avoid duplicate instanstiations 
+
+        private readonly ICustomerService _customerService;
+
+        public ContactBookMenuService(ICustomerService customerService)
+        {
+            _customerService = customerService;
+        }
 
         // this part shows the main menu 
         public void ShowMainMenu()
@@ -65,6 +72,7 @@ namespace ContactBook.Services
             }
         }
 
+        // This code adds the user bit by bit and then creates a new object 
         public void ShowAddCustomerOption(Customer customer)
         {
             DisplayMenuTitle("Add new customer");
@@ -113,16 +121,17 @@ namespace ContactBook.Services
         }
 
 
-
+        //This code renders out the saved file aplhabetically for clearer structure 
         public void ShowViewCustomerListOption()
         {
             DisplayMenuTitle("View Customer List");
 
-            var customers = _customerService.GetAllFromList();
+            // Added function here to render out list aplhabetically from firstname
+            var customers = _customerService.GetAllFromList().OrderBy(customer => customer.FirstName).ToList();
 
             int count = 1;
 
-            //This loop creates a customer and adds a index through a count 
+            // Display the sorted list
             foreach (var customer in customers)
             {
                 Console.WriteLine($"#{count} - Customer: {customer.FirstName} {customer.LastName}, Email: {customer.Email}, Phone: {customer.PhoneNumber}");
@@ -134,7 +143,7 @@ namespace ContactBook.Services
 
 
 
-
+        // This code deletes the customer from the file and then saves the new list without deleted customer
 
         public void DeleteCustomerByEmailOption()
         {
@@ -254,6 +263,7 @@ namespace ContactBook.Services
             ReturnToMenu();
         }
 
+        // This code shows the customer depending on the email input and renders that out 
         public void ShowOneCustomerByEmailOption()
         {
             DisplayMenuTitle("Print Customer by Email");
@@ -268,6 +278,7 @@ namespace ContactBook.Services
             ReturnToMenu();
         }
 
+        //This code shows the menu depending on the input from the menuservice
         private static void DisplayMenuTitle(string title)
         {
             Console.Clear();
@@ -275,6 +286,8 @@ namespace ContactBook.Services
             Console.WriteLine();
         }
 
+
+        // I refactored this code so that I dont have to repeat it to much, it looks the console and waits for input
         private static void ReturnToMenu()
         {
             Console.WriteLine("\nPress any key to return to the main menu...");
