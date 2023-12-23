@@ -7,6 +7,7 @@ namespace ContactBook.Tests
 {
     public class CustomerService_Tests
     {
+        
         [Fact]
         public void AddToListShould_AddOneCustomerToCustomerList_ThenReturnTrue()
         {

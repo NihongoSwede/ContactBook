@@ -1,6 +1,5 @@
 ﻿using ContactBook.Enums;
 using ContactBook.Interfaces;
-using System.Linq;
 
 namespace ContactBook.Services
 {
@@ -99,7 +98,7 @@ namespace ContactBook.Services
             var newCustomer = new Customer(firstName, lastName, email, phoneNumber, address, city, postalCode, country);
 
             // Add the customer to the list
-            var result = _customerService.AddToList(newCustomer); 
+            var result = _customerService.AddToList(newCustomer);
 
             if (result)
             {
@@ -110,8 +109,7 @@ namespace ContactBook.Services
                 Console.WriteLine("Failed to add the customer. Please try again.");
             }
 
-            Console.WriteLine("\nPress any key to return to the main menu...");
-            Console.ReadKey();
+            ReturnToMenu();
         }
 
 
@@ -131,14 +129,9 @@ namespace ContactBook.Services
                 count++;
             }
 
-
-
-
-
-            Console.WriteLine("\nPress any key to return to the main menu...");
-            Console.ReadKey();
+            ReturnToMenu();
         }
-        
+
 
 
 
@@ -164,6 +157,8 @@ namespace ContactBook.Services
             {
                 Console.WriteLine("Failed to delete the customer. Please try again.");
             }
+
+            ReturnToMenu();
         }
 
         //This part can change a existing customer 
@@ -256,8 +251,7 @@ namespace ContactBook.Services
                 Console.WriteLine("Customer with the specified Email not found.");
             }
 
-            Console.WriteLine("\nPress any key to return to the main menu...");
-            Console.ReadKey();
+            ReturnToMenu();
         }
 
         public void ShowOneCustomerByEmailOption()
@@ -271,8 +265,7 @@ namespace ContactBook.Services
             Console.WriteLine("");
             _customerService.PrintCustomerByEmail(emailToPrint);
 
-            Console.WriteLine("\nPress any key to return to the main menu...");
-            Console.ReadKey();
+            ReturnToMenu();
         }
 
         private static void DisplayMenuTitle(string title)
@@ -282,6 +275,12 @@ namespace ContactBook.Services
             Console.WriteLine();
         }
 
-        
+        private static void ReturnToMenu()
+        {
+            Console.WriteLine("\nPress any key to return to the main menu...");
+            Console.ReadKey();
+        }
+
+
     }
 }

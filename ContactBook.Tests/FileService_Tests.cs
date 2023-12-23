@@ -1,8 +1,6 @@
 ﻿using ContactBook.Interfaces;
 using ContactBook.Services;
 using Moq;
-using System;
-using Xunit;
 
 namespace ContactBook.Tests
 {

@@ -2,9 +2,8 @@
 using ContactBook.Interfaces;
 using ContactBook.Models.Responses;
 using Newtonsoft.Json;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
+
 
 public class CustomerService : ICustomerService
 {

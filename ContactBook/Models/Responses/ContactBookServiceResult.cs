@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using ContactBook.Enums;
+﻿using ContactBook.Enums;
 using ContactBook.Interfaces;
 
 namespace ContactBook.Models.Responses
