@@ -5,7 +5,9 @@ namespace ContactBook.Services
 {
     public class ContactBookMenuService : IContactMenuService
     {
-        //I set up dependency injection here to avoid duplicate instanstiations 
+        /// <summary>
+        /// I set up dependency injection here to avoid duplicate instanstiations 
+        /// </summary>
 
         private readonly ICustomerService _customerService;
 
@@ -14,7 +16,9 @@ namespace ContactBook.Services
             _customerService = customerService;
         }
 
-        // this part shows the main menu 
+        /// <summary>
+        /// this part shows the main menu 
+        /// </summary>
         public void ShowMainMenu()
         {
             while (true)
@@ -59,7 +63,9 @@ namespace ContactBook.Services
             }
         }
 
-        // I use this to exit the application 
+        /// <summary>
+        /// I use this to exit the application 
+        /// </summary>
         public void ShowExitApplicationOption()
         {
             Console.Clear();
@@ -72,7 +78,10 @@ namespace ContactBook.Services
             }
         }
 
-        // This code adds the user bit by bit and then creates a new object 
+        /// <summary>
+        /// This code adds the user bit by bit and then creates a new object 
+        /// </summary>
+        /// <param name="customer"></param>
         public void ShowAddCustomerOption(Customer customer)
         {
             DisplayMenuTitle("Add new customer");
@@ -121,7 +130,9 @@ namespace ContactBook.Services
         }
 
 
-        //This code renders out the saved file aplhabetically for clearer structure 
+        /// <summary>
+        /// This code renders out the saved file aplhabetically for clearer structure 
+        /// </summary>
         public void ShowViewCustomerListOption()
         {
             DisplayMenuTitle("View Customer List");
@@ -143,7 +154,9 @@ namespace ContactBook.Services
 
 
 
-        // This code deletes the customer from the file and then saves the new list without deleted customer
+        /// <summary>
+        /// This code deletes the customer from the file and then saves the new list without deleted customer
+        /// </summary>
 
         public void DeleteCustomerByEmailOption()
         {
@@ -170,7 +183,9 @@ namespace ContactBook.Services
             ReturnToMenu();
         }
 
-        //This part can change a existing customer 
+        /// <summary>
+        /// This part can change a existing customer 
+        /// </summary>
         public void ShowChangeCustomerOption()
         {
             DisplayMenuTitle("Change Customer Information");
@@ -263,7 +278,9 @@ namespace ContactBook.Services
             ReturnToMenu();
         }
 
-        // This code shows the customer depending on the email input and renders that out 
+        /// <summary>
+        /// This code shows the customer depending on the email input and renders that out 
+        /// </summary>
         public void ShowOneCustomerByEmailOption()
         {
             DisplayMenuTitle("Print Customer by Email");
@@ -278,7 +295,10 @@ namespace ContactBook.Services
             ReturnToMenu();
         }
 
-        //This code shows the menu depending on the input from the menuservice
+        /// <summary>
+        /// This code shows the menu depending on the input from the menuservice
+        /// </summary>
+        /// <param name="title"></param>
         private static void DisplayMenuTitle(string title)
         {
             Console.Clear();
@@ -287,7 +307,9 @@ namespace ContactBook.Services
         }
 
 
-        // I refactored this code so that I dont have to repeat it to much, it looks the console and waits for input
+        /// <summary>
+        /// I refactored this code so that I dont have to repeat it to much, it looks the console and waits for input
+        /// </summary>
         private static void ReturnToMenu()
         {
             Console.WriteLine("\nPress any key to return to the main menu...");

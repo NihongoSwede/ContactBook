@@ -5,7 +5,11 @@ namespace ContactBook.Services
 {
     public class FileService : IFileService
     {
-        //This here is used to retrieve content from file 
+        /// <summary>
+        /// This here is used to retrieve content from file 
+        /// </summary>
+        /// <param name="filepath"></param>
+        /// <returns> FilePath</returns>
         public string GetContentFromFile(string filepath)
         {
 
@@ -30,7 +34,12 @@ namespace ContactBook.Services
             }
         }
 
-        //This function here saves the content to the file 
+        /// <summary>
+        /// This function here saves the content to the file 
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <param name="content"></param>
+        /// <returns>Saved file</returns>
         public bool SaveToFile(string filePath, string content)
         {
             try
@@ -50,7 +59,13 @@ namespace ContactBook.Services
             return false;
         }
 
-        //This function here edits the file content 
+        /// <summary>
+        /// This function here edits the file content 
+        /// </summary>
+        /// <param name="filepath"></param>
+        /// <param name="originalContent"></param>
+        /// <param name="editedContent"></param>
+        /// <returns>Editedfile content and saves it to the current file</returns>
         public bool EditFileContent(string filepath, string originalContent, string editedContent)
         {
             try

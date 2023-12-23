@@ -24,7 +24,9 @@ public class CustomerService : ICustomerService
 
     }
 
-    //Function that helps to save any changes made to the data  
+    /// <summary>
+    /// Function that helps to save any changes made to the data  
+    /// </summary>
 
     public void SaveCustomerListToFile()
     {
@@ -36,7 +38,9 @@ public class CustomerService : ICustomerService
         _fileService.SaveToFile(_filePath, json);
     }
 
-    // This function helps to load the data 
+    /// <summary>
+    /// This function helps to load the data 
+    /// </summary>
     public void LoadCustomerListFromFile()
     {
         try
@@ -55,7 +59,11 @@ public class CustomerService : ICustomerService
     }
 
 
-    //Function that are related to the service itself 
+    /// <summary>
+    /// Function that are related to the service itself 
+    /// </summary>
+    /// <param name="customer"></param>
+    /// <returns> Customer to the list</returns>
     public bool AddToList(ICustomer customer)
     {
         if (customer == null)
@@ -75,7 +83,10 @@ public class CustomerService : ICustomerService
         return true;
     }
 
-    // This function gets all the data as a list 
+    /// <summary>
+    /// This function gets all the data as a list 
+    /// </summary>
+    /// <returns> _customerList</returns>
     public IEnumerable<ICustomer> GetAllFromList()
     {
         
@@ -83,7 +94,11 @@ public class CustomerService : ICustomerService
 
     }
 
-    // This function here deletes the data basd on an input from email 
+    /// <summary>
+    /// This function here deletes the data basd on an input from email 
+    /// </summary>
+    /// <param name="email"></param>
+    /// <returns>the new list with a deleted user</returns>
     public ContactBookServiceResult DeleteCustomerByEmail(string email)
     {
         var response = new ContactBookServiceResult();
@@ -103,7 +118,11 @@ public class CustomerService : ICustomerService
         return response;
     }
 
-    // This function updates the user based on input 
+    /// <summary>
+    /// This function updates the user based on input 
+    /// </summary>
+    /// <param name="updatedCustomer"></param>
+    /// <returns>the updated user to the current list</returns>
     public ContactBookServiceResult UpdateCustomer(ICustomer updatedCustomer)
     {
         var response = new ContactBookServiceResult();
@@ -123,7 +142,10 @@ public class CustomerService : ICustomerService
         return response;
     }
 
-    // This function prints out the user based on email 
+    /// <summary>
+    /// This function prints out the user based on email 
+    /// </summary>
+    /// <param name="email"></param>
     public void PrintCustomerByEmail(string email)
     {
         var customer = _customerList!.FirstOrDefault(c => c.Email == email);
