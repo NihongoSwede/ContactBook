@@ -7,13 +7,19 @@ using System.Diagnostics;
 
 public class CustomerService : ICustomerService
 {
-    //The handling of the list is run to package and unpackage it as JSON
+    /// <summary>
+    /// The handling of the list is run to package and unpackage it as JSON
+    /// </summary>
     
     public readonly IFileService _fileService;
     public readonly string _filePath;
     public List<ICustomer>? _customerList = [];
 
-    // This is my initialization of the variables that are used to create the filepath 
+    /// <summary>
+    /// This is my initialization of the variables that are used to create the filepath 
+    /// </summary>
+    /// <param name="fileService"></param>
+    /// <param name="filePath"></param>
 
     public CustomerService(IFileService fileService, string filePath = @"C:\Users\mhede\source\repos\ContactBook\customers.json")
     {
