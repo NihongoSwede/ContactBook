@@ -75,7 +75,7 @@ public class CustomerService : ICustomerService
         return true;
     }
 
-    // This function gets all the data as a readable list 
+    // This function gets all the data as a list 
     public IEnumerable<ICustomer> GetAllFromList()
     {
         
