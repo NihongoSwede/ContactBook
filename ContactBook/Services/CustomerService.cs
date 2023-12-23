@@ -7,6 +7,8 @@ using System.Diagnostics;
 
 public class CustomerService : ICustomerService
 {
+    //The handling of the list is run to package and unpackage it as JSON
+    
     public readonly IFileService _fileService;
     public readonly string _filePath;
     public List<ICustomer>? _customerList = [];
