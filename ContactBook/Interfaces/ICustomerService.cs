@@ -1,21 +1,17 @@
 ﻿using ContactBook.Models.Responses;
+using System.Collections.Generic;
 
 namespace ContactBook.Interfaces
 {
     public interface ICustomerService
     {
-        bool AddToList(ICustomer customer);
-        IEnumerable<ICustomer> GetAllFromList();
-        
-        ContactBookServiceResult DeleteCustomerByEmail(string email);
-       
-        ContactBookServiceResult UpdateCustomer(ICustomer updatedCustomer);
+        bool Add(ICustomer customer);
+        IEnumerable<ICustomer> GetAll();
 
-        void PrintCustomerByEmail(string email);
+        ContactBookServiceResult DeleteByEmail(string email);
 
-        
+        ContactBookServiceResult Update(ICustomer updatedCustomer);
 
-        
-
+        void PrintByEmail(string email);
     }
 }
